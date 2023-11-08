@@ -9,34 +9,37 @@ try:
 		token = json.load(token_file)
 		bot = telebot.TeleBot(token['token'])
 except FileNotFoundError:
-	print('Create token.json {"token":"YourApiToken"}')
+	print('Create token.json ( {"token":"YourApiToken"} )')
 
 # global variables used to pass dices to the `roll_advantage` function
 advantage_check_flag = None
 advantage_dice = {}
 
 
+# Default start/restart function
 @bot.message_handler(commands=['start'])
 def start(message):
 	bot.send_message(message.chat.id, 'Hello :3\nCheck out /help pls')
 
 
+# Function that displays the contents of `help_message.txt`
 @bot.message_handler(commands=['help'])
 def help_message(message):
 	with open(file='./help_message.txt') as file:
 		bot.send_message(message.chat.id, str(file.read()))
 
 
+# Main function for rolling dice
 @bot.message_handler(commands=['roll'])
 def roll(message):
 	try:
 		inputted_dice = telebot.util.extract_arguments(message.text)
-		if inputted_dice == '':
+		if inputted_dice == '':  # if user types in `/roll` then we interpret it as 1d20
 			inputted_dice = '1d20+0'
 		answer = roll_helper(inputted_dice)
 		bot.send_message(message.chat.id, str(answer))
-	except ValueError:
-		bot.send_message(message.chat.id, "Something is wrong, probably 0-sided dice")
+	except ValueError:  # handling wierd occurrences
+		bot.send_message(message.chat.id, "Something is wrong, probably 0-sided die")
 	except (telebot.apihelper.ApiTelegramException, telebot.apihelper.ApiHTTPException):
 		bot.send_message(message.chat.id, "Why")
 
