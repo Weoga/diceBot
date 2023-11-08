@@ -1,0 +1,9 @@
+Welcome to the help page, traveler
+To use the main (aka only) functionality of this bot type /roll [number of dices]d{number of sides}+/-[modifier]
+Examples:
+2d6
+d20
+3d12-4
+4d6+2
+d6-1
+Alternatively just input your dice itself
